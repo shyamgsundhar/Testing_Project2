@@ -19,8 +19,8 @@ def download_model():
 
 download_model()
 
-# Load the model with compile=False to avoid deserialization errors
-model = load_model(MODEL_PATH, compile=False)
+# Load the model normally (no compile=False needed with updated TF)
+model = load_model(MODEL_PATH)
 
 # Define target size (adjust based on your model's input shape)
 TARGET_SIZE = (224, 224)
