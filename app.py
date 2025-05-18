@@ -7,7 +7,6 @@ from tensorflow.keras.preprocessing import image
 
 app = Flask(__name__)
 
-# Path where model will be stored after download
 MODEL_PATH = "model.h5"
 GOOGLE_DRIVE_ID = "1UqcY2fnDeeYvN52-vYhdQkOsvndZN0eE"
 
@@ -19,10 +18,8 @@ def download_model():
 
 download_model()
 
-# Load the model normally (no compile=False needed with updated TF)
 model = load_model(MODEL_PATH)
 
-# Define target size (adjust based on your model's input shape)
 TARGET_SIZE = (224, 224)
 
 @app.route('/predict', methods=['POST'])
@@ -34,21 +31,17 @@ def predict():
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
-    # Save the uploaded file temporarily
     file_path = "temp.jpg"
     file.save(file_path)
 
-    # Load and preprocess image
     img = image.load_img(file_path, target_size=TARGET_SIZE)
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
-    x = x / 255.0  # Normalize if your model expects it
+    x = x / 255.0
 
-    # Make prediction
     preds = model.predict(x)
-    prediction = preds.argmax(axis=-1)[0]  # Adjust depending on model output
+    prediction = preds.argmax(axis=-1)[0]
 
-    # Clean up
     os.remove(file_path)
 
     return jsonify({'prediction': int(prediction)})
