@@ -20,7 +20,7 @@ download_model()
 
 model = load_model(MODEL_PATH)
 
-TARGET_SIZE = (224, 224)
+TARGET_SIZE = (150, 150)
 
 @app.route('/predict', methods=['POST'])
 def predict():
